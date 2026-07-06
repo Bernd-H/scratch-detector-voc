@@ -25,6 +25,8 @@ class DetectionLoss(nn.Module):
     def forward(self, preds, targets, ignore):
         obj_mask   = targets[..., 0] == 1
         noobj_mask = (~obj_mask) & (~ignore)
+        # clamp(min=1): guards against divide-by-zero if a batch has no positive
+        # (or, less likely, no negative) cells
         N_pos   = obj_mask.sum().clamp(min=1).float()
         N_noobj = noobj_mask.sum().clamp(min=1).float()
 

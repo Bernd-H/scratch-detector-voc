@@ -74,7 +74,6 @@ def random_resized_crop(img, objects, orig_w, orig_h, scale=(0.7, 1.0)):
         ymin = float(bb['ymin']) - y0
         xmax = float(bb['xmax']) - x0
         ymax = float(bb['ymax']) - y0
-        # clip to crop window
         xmin = max(0, min(xmin, w)); xmax = max(0, min(xmax, w))
         ymin = max(0, min(ymin, h)); ymax = max(0, min(ymax, h))
         # drop boxes that vanish or become degenerate after cropping
@@ -257,7 +256,12 @@ def class_presence_weight(objects, class_freq_inv):
 
 
 def compute_class_weights():
-    """Inverse-frequency class weights (sqrt-damped) for the classification loss."""
+    """Inverse-frequency class weights for the classification loss.
+
+    Square-rooted to temper the weighting: plain 1/count would let the
+    rarest classes (bus, bicycle) dominate the loss too strongly relative
+    to their actual importance.
+    """
     counts_tensor = torch.tensor(
         [CLASS_INSTANCE_COUNTS[c] for c in VOC_CLASSES], dtype=torch.float32
     )
