@@ -39,3 +39,7 @@ python train.py
 ```
 
 Trains for 80 epochs and writes `best_detector.pt`, `training_curves.png`, and `detections.png` to `~/workspace/outputs`.
+
+
+## Authors
+Bernd Hatzinger, Christoffer Trebo, Marin Toma — 192.151 Introduction to Deep Learning, TU Wien.
